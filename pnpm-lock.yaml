@@ -12,13 +12,13 @@ importers:
 
   .:
     dependencies:
+      '@umber-style/is-prop-valid':
+        specifier: ^0.7.0
+        version: 0.7.0
       csstype:
         specifier: ^3.2.3
         version: 3.2.4
     devDependencies:
-      '@emotion/is-prop-valid':
-        specifier: ^1.4.0
-        version: 1.4.0
       '@soroush.tech/bench':
         specifier: ^2.2.3
         version: 2.4.0
@@ -78,12 +78,6 @@ packages:
 
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
-
-  '@emotion/is-prop-valid@1.4.0':
-    resolution: {integrity: sha512-QgD4fyscGcbbKwJmqNvUMSE02OsHUa+lAWKdEUIJKgqe5IwRSKd7+KhibEWdaKwgjLj0DRSHA9biAIqGBk05lw==}
-
-  '@emotion/memoize@0.9.0':
-    resolution: {integrity: sha512-30FAj7/EoJ5mwVPOWhAyCX+FPfMDrVecJAM+Iw9NRoSl4BBAQeqj4cApHHUXOVvIPgLVDsCFoz/hGD+5QQD1GQ==}
 
   '@jridgewell/resolve-uri@3.1.3':
     resolution: {integrity: sha512-lhTtjtoEArWBjismtfS761S9Hlyn+nIZqOZVYoZ1Xn82PMNMVnk+jj/NhC4fAXGTs7ydONcJiR5vyQBTMDu27g==}
@@ -573,6 +567,9 @@ packages:
     engines: {node: '>=16.20.0'}
     cpu: [x64]
     os: [win32]
+
+  '@umber-style/is-prop-valid@0.7.0':
+    resolution: {integrity: sha512-GiaqPzWBroBPc2CxQpjE2FM/Aey+gvIbBSLDUUSF5LGQkCZQfrnLo+nvJWcD1YhSv0NFefvG5XiQB0fl5M9iFg==}
 
   '@vitest/coverage-v8@5.1.2':
     resolution: {integrity: sha512-VG0JLv0T4kr1fR6QAfe8PTou+Frc4t0u4j+oKgDH3djJpFawzBfGyX14/z56NXoCTNem3OEphzCJhc4DkE62xQ==}
@@ -1102,12 +1099,6 @@ snapshots:
       tslib: 2.9.1
     optional: true
 
-  '@emotion/is-prop-valid@1.4.0':
-    dependencies:
-      '@emotion/memoize': 0.9.0
-
-  '@emotion/memoize@0.9.0': {}
-
   '@jridgewell/resolve-uri@3.1.3': {}
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
@@ -1375,6 +1366,8 @@ snapshots:
 
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
+
+  '@umber-style/is-prop-valid@0.7.0': {}
 
   '@vitest/coverage-v8@5.1.2(vitest@5.1.2)':
     dependencies:

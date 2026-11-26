@@ -13,6 +13,12 @@ describe('should-forward-prop', () => {
     expect(shouldForwardProp('notARealProp')).toBe(false) // not a valid HTML prop
   })
 
+  it('forwards the attributes React 19 added', () => {
+    for (const attribute of ['fetchPriority', 'popover', 'inert']) {
+      expect(shouldForwardProp(attribute)).toBe(true)
+    }
+  })
+
   it('memoizes lookups', () => {
     const fn = createShouldForwardProp(['m'])
     expect(fn('href')).toBe(true)

@@ -46,7 +46,15 @@ describe('space', () => {
     })
 
     it('prefixes a non-numeric scale value with a minus', () => {
-      expect(margin({ m: -1, theme: { space: [0, '1rem'] } })).toEqual({ margin: '-1rem' })
+      expect(margin({ m: -1, theme: { space: [0, '1rem'] } })).toEqual({
+        margin: 'calc(1rem * -1)',
+      })
+    })
+
+    it('wraps a negative reference in calc', () => {
+      expect(margin({ m: -1, theme: { space: [0, 'var(--space-1)'] } })).toEqual({
+        margin: 'calc(var(--space-1) * -1)',
+      })
     })
 
     it('keeps a non-numeric scale value unchanged for positive indices', () => {

@@ -76,9 +76,15 @@ describe('css', () => {
     })
   })
 
+  it('makes a negative margin over references valid CSS', () => {
+    expect(css({ mt: -1 })({ space: [0, 'var(--space-1)'] })).toEqual({
+      marginTop: 'calc(var(--space-1) * -1)',
+    })
+  })
+
   it('handles negative margins against numeric and string scales', () => {
     expect(css({ mt: -1, mb: 'auto' })({ space: [0, '2rem'] })).toEqual({
-      marginTop: '-2rem',
+      marginTop: 'calc(2rem * -1)',
       marginBottom: 'auto',
     })
     expect(css({ ml: -2 })({ space: [0, 4, 8] })).toEqual({ marginLeft: -8 })
