@@ -63,3 +63,8 @@ Exception: self-evident one-liners (typo fix, missing import).
 3. `pnpm typecheck`
 4. `pnpm test:coverage` - verify 100%
 5. `pnpm build`
+6. `pnpm check:release-notes`
+
+## Releasing
+
+See [RELEASING.md](./RELEASING.md): releases are a manual `CD` workflow dispatch (alpha, rc, stable).

@@ -1,0 +1,4 @@
+comment:
+  layout: 'header, diff, files'
+  behavior: default # Add a comment on every PR with updated coverage
+  require_changes: false # Always show comment, even if no coverage change

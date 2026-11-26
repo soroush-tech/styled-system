@@ -1,0 +1,153 @@
+name: CD
+
+# Publishes @soroush.tech/styled-system to npm via Trusted Publishing (OIDC). Manual dispatch
+# only - never from a push, PR merge, or CI completion. A release is a deliberate act with
+# required, human-written notes; auth is a short-lived id-token minted per run and verified
+# against the npm trusted publisher (no long-lived token).
+#
+# The channel decides what goes out. package.json always holds the target version;
+# scripts/prerelease-versions.mjs turns it into the published one:
+#   alpha  - <target>-alpha.N under the `alpha` dist-tag, from any branch whose commit passed
+#            CI, so a PR can be tried in real apps before it merges. No GitHub Release.
+#   rc     - <target>-rc.N under `rc`, from main. A GitHub pre-release.
+#   stable - <target> under `latest`, from main. A GitHub Release.
+# N counts up from what npm already has; a prerelease never touches `latest`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: Release channel (`alpha` from a CI-passed branch; `rc` and `stable` from main)
+        required: true
+        type: choice
+        default: alpha
+        options:
+          - alpha
+          - rc
+          - stable
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: cd
+    timeout-minutes: 15
+    permissions:
+      id-token: write # OIDC token for npm Trusted Publishing (no NPM_TOKEN)
+      contents: write # create the GitHub Release + tag
+      checks: read # read the commit's ci-ok result for an alpha
+    steps:
+      # rc and stable come off main only. An alpha may come off any branch, but only a commit
+      # whose CI finished green: ci-ok is the single required check of ci.yml, and a branch
+      # without a PR has no CI run, so it can't publish.
+      - name: Check the branch and CI
+        env:
+          CHANNEL: ${{ inputs.channel }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$CHANNEL" != "alpha" ]; then
+            [ "$GITHUB_REF" = "refs/heads/main" ] \
+              || { echo "::error::$CHANNEL publishes from main only, not $GITHUB_REF"; exit 1; }
+            exit 0
+          fi
+          conclusion=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?check_name=ci-ok" \
+            --jq '[.check_runs[] | select(.status == "completed")][0].conclusion // "none"')
+          [ "$conclusion" = "success" ] \
+            || { echo "::error::ci-ok on $GITHUB_SHA is '$conclusion' - an alpha needs green CI (open a PR and let it pass)"; exit 1; }
+
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Release notes are an in-repo file (release-notes/<version>.md): require one for the
+      # target version before publish, so a release can never ship without notes and npm is
+      # never touched when they are missing.
+      - name: Require release notes
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          test -f "release-notes/$VERSION.md" \
+            || { echo "::error::Missing release notes: release-notes/$VERSION.md"; exit 1; }
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
+
+      # --ignore-scripts, as everywhere in CI/CD: no lifecycle script runs at install.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # Turn the package.json target into this channel's version (in this checkout only).
+      - name: Set channel version
+        env:
+          CHANNEL: ${{ inputs.channel }}
+        run: node scripts/prerelease-versions.mjs "$CHANNEL" >> "$GITHUB_ENV"
+
+      # Publish via npm Trusted Publishing (OIDC). Auth comes from the id-token minted above -
+      # there is no NPM_TOKEN, and NODE_AUTH_TOKEN must stay unset (even an empty value makes
+      # pnpm use token auth instead of falling back to OIDC). A version already on the registry
+      # is skipped rather than failing on a republish; bump the version on main to release it.
+      - name: Publish
+        env:
+          CHANNEL: ${{ inputs.channel }}
+        run: |
+          # npm puts an untagged version on `latest`, which every consumer installs - so a
+          # prerelease always goes out under its channel's dist-tag.
+          tag=latest
+          [ "$CHANNEL" != "stable" ] && tag="$CHANNEL"
+          name=$(node -p "require('./package.json').name")
+          # --prefer-online throughout: npm caches a package's metadata for minutes, and a
+          # copy cached before this publish would hide the version it just published.
+          if npm view --prefer-online "$name@$VERSION" version >/dev/null 2>&1; then
+            echo "⏭️ \`$name@$VERSION\` already on npm - skipped (bump the version to release)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          pnpm publish --no-git-checks --tag "$tag"
+          # A prerelease on `latest` would hand it to every user: stop loudly.
+          latest=$(npm view --prefer-online "$name" dist-tags.latest 2>/dev/null)
+          case "$latest" in
+            *-*) echo "::error::$name latest is now $latest - move it back with npm dist-tag"; exit 1 ;;
+            *) ;; # a release on `latest`: as it should be
+          esac
+          echo "### 📦 Published \`$name@$VERSION\` (\`$tag\`)" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://www.npmjs.com/package/$name/v/$VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "::notice title=Published::$name@$VERSION"
+
+      # Create the GitHub Release (and its tag) if it doesn't already exist - gated on the
+      # release's existence, not on whether npm was newly published in this run, so a rerun
+      # can repair a missing release after a successful publish. An alpha has none.
+      - name: Create GitHub Release
+        if: ${{ inputs.channel != 'alpha' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHANNEL: ${{ inputs.channel }}
+        run: |
+          # An rc is a GitHub pre-release and never "Latest". --target pins the tag to the
+          # published commit. The notes are the target version's file (6.1.0.md for 6.1.0-rc.1).
+          flags=""
+          [ "$CHANNEL" = "rc" ] && flags="--prerelease --latest=false"
+          name=$(node -p "require('./package.json').name")
+          tag="$name@$VERSION"
+          # Ask the registry, not npm's cache; it can take minutes to list a fresh version.
+          found=""
+          for _ in $(seq 60); do
+            npm view --prefer-online "$name@$VERSION" version >/dev/null 2>&1 && { found=1; break; }
+            sleep 10
+          done
+          [ -n "$found" ] || { echo "::error::$tag is not on the registry yet - rerun to create its Release."; exit 1; }
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "⏭️ GitHub Release \`$tag\` already exists - skipped." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          gh release create "$tag" --title "$tag" --target "$GITHUB_SHA" $flags \
+            --notes-file "release-notes/${VERSION%%-*}.md"
+          echo "### 🏷️ Released \`$tag\`" >> "$GITHUB_STEP_SUMMARY"

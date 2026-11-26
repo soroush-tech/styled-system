@@ -1,0 +1,24 @@
+# Every job installs through this action, so editing it re-runs every one of them.
+# The checkout stays in the jobs: a local action is resolved from the working tree.
+name: Setup
+description: Set up pnpm and Node (from .nvmrc), then install the dependencies.
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+    - name: Setup Node
+      uses: actions/setup-node@v7
+      with:
+        node-version-file: .nvmrc
+        cache: pnpm
+
+    # --ignore-scripts, as everywhere in CI/CD: no lifecycle script runs at install -
+    # the package builds with tsdown, which needs none.
+    - name: Install dependencies
+      shell: bash
+      env:
+        CI: true
+      run: pnpm install --frozen-lockfile --ignore-scripts

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "rebaseWhen": "conflicted",
+  "prConcurrentLimit": 1,
+  "prHourlyLimit": 2,
+  "labels": ["dependencies"],
+  "semanticCommits": "enabled",
+  "rangeStrategy": "bump",
+  "enabledManagers": ["npm"],
+  "separateMajorMinor": false,
+  "separateMinorPatch": false,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "packageRules": [
+    {
+      "matchDepTypes": ["packageManager"],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["pin"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": ["*"],
+      "groupName": "all dependencies",
+      "groupSlug": "all"
+    }
+  ],
+  "platformAutomerge": true
+}

@@ -1,5 +1,6 @@
 # @soroush.tech/styled-system
 
+[![CI](https://github.com/soroush-tech/styled-system/actions/workflows/ci.yml/badge.svg)](https://github.com/soroush-tech/styled-system/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@soroush.tech/styled-system.svg?cacheSeconds=86400)](https://www.npmjs.com/package/@soroush.tech/styled-system)
 [![npm downloads](https://img.shields.io/npm/dm/@soroush.tech/styled-system.svg?cacheSeconds=86400)](https://www.npmjs.com/package/@soroush.tech/styled-system)
 [![coverage](https://codecov.io/gh/soroush-tech/styled-system/branch/main/graph/badge.svg)](https://app.codecov.io/gh/soroush-tech/styled-system)

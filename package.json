@@ -300,6 +300,7 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "typecheck": "tsc --noEmit",
+    "check:release-notes": "node scripts/check-release-notes.mjs",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "bench": "soroush-bench bench/color.bench.ts",
