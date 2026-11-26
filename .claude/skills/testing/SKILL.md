@@ -25,7 +25,7 @@ Scope a run with a path filter: `pnpm exec vitest run src/space`.
 
 `coverage/` at the repo root (reporters: `text` + `lcov`; gitignored):
 
-- `coverage/lcov.info` - the file CI uploads to Codecov (tokenless, OIDC).
+- `coverage/lcov.info` - the file CI uploads to Codecov (with the `CODECOV_TOKEN` secret).
 - The `text` reporter prints the summary to stdout - no file.
 
 Coverage covers `src/**` and `scripts/**/*.mjs`.
