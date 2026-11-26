@@ -14,13 +14,13 @@ because a mobile-first query is a min-width; the range ends where the next key s
 breakpoints: { xs: '0px', sm: '600px', md: '840px', lg: '1200px', xl: '1600px' }
 ```
 
-| Key  | Range       | Window class (Material 3) |
-| ---- | ----------- | ------------------------- |
-| `xs` | 0-599px     | compact                   |
-| `sm` | 600-839px   | medium                    |
-| `md` | 840-1199px  | expanded                  |
-| `lg` | 1200-1599px | large                     |
-| `xl` | 1600px+     | extra-large               |
+| Key  | Range       | Window class |
+| ---- | ----------- | ------------ |
+| `xs` | 0-599px     | compact      |
+| `sm` | 600-839px   | medium       |
+| `md` | 840-1199px  | expanded     |
+| `lg` | 1200-1599px | large        |
+| `xl` | 1600px+     | extra-large  |
 
 `xs` starts at 0, so it applies everywhere until `sm` overrides it - it is the base. The names
 are window classes, not devices: a class is about the space the window has, not the hardware.

@@ -11,7 +11,7 @@ component's props. Each interface is generic over your `Theme`, so prop values a
 **scale-aware** - they resolve to keys of the relevant theme scale.
 
 ```tsx
-import styled from '@emotion/styled'
+import { styled } from '@umber-style/react'
 import {
   space,
   color,
@@ -60,7 +60,7 @@ Prop interfaces exported: `SpaceProps`, `MarginProps`, `PaddingProps`, `LayoutPr
 ## Custom style functions are typed too
 
 `system()` / `createParser()` / `compose()` return a `Parser` - a callable that drops
-straight into Emotion's or styled-components' `styled()` as an interpolation. Its call
+straight into the `styled()` of a CSS-in-JS library such as UmberStyle as a style function. Its call
 signature is currently loosened to `(...args: any[]): any` to match the original
 `@styled-system` `styleFn`, so the style functions stay permissive interpolations on any
 host element. A stricter `<P extends { theme?: unknown }>(props: P) => CSSObject`

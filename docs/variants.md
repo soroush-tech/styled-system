@@ -10,7 +10,7 @@ Note: Inline variants is a new feature in `v5.1.0`, which uses [@soroush.tech/st
 
 ```js
 // example Button with variants
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { variant } from '@soroush.tech/styled-system'
 
 const Button = styled('button')(

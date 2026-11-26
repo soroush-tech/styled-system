@@ -63,7 +63,7 @@ In version 5, built-in styles are grouped, and the above can be replaced with:
 const Box = styled('div')(layout)
 ```
 
-This API was inspired by [GitHub Primer][] and includes the following categories:
+This API includes the following categories:
 
 | Module       | Style Props                                                                                                                                                                                                                                                                                                |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -76,8 +76,6 @@ This API was inspired by [GitHub Primer][] and includes the following categories
 | `background` | `background`, `backgroundImage`, `backgroundSize`, `backgroundPosition`, `backgroundRepeat`                                                                                                                                                                                                                |
 | `position`   | `position`, `zIndex`, `top`, `right`, `bottom`, `left`                                                                                                                                                                                                                                                     |
 | `grid`       | `gridGap`, `gridColumnGap`, `gridRowGap`, `gridColumn`, `gridRow`, `gridAutoFlow`, `gridAutoColumns`, `gridAutoRows`, `gridTemplateColumns`, `gridTemplateRows`, `gridTemplateAreas`, `gridArea`,                                                                                                          |
-
-[github primer]: https://primer.style/components/system-props#system-prop-categories
 
 ### Compose
 

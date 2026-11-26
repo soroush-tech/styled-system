@@ -13,22 +13,24 @@ array / object values into media queries.
 It returns a function of `theme` (or `props.theme`), so it slots directly into any
 CSS-in-JS library:
 
-```jsx
-import styled from '@emotion/styled'
+```tsx
+import { styled, type WebStyleObject } from '@umber-style/react'
 import { css } from '@soroush.tech/styled-system/css'
 
-const Box = styled('div')(
-  css({
-    p: 4,
-    bg: 'primary',
-    color: 'white',
-    borderRadius: 2,
-    '&:hover': {
-      bg: 'secondary',
-    },
-    fontSize: [2, 3, 4], // responsive
-  })
-)
+const boxStyle = css({
+  p: 4,
+  bg: 'primary',
+  color: 'white',
+  borderRadius: 2,
+  '&:hover': {
+    bg: 'secondary',
+  },
+  fontSize: [2, 3, 4], // responsive
+})
+
+// The `CSSObject` this package returns is not the style type of UmberStyle: in TypeScript,
+// cast the result to `WebStyleObject`. Plain JavaScript needs no cast.
+const Box = styled('div')((props) => boxStyle(props) as WebStyleObject)
 ```
 
 Use it standalone too:
@@ -50,12 +52,12 @@ import { themeGet } from '@soroush.tech/styled-system/theme-get'
 fallback. Handy inside template literals:
 
 ```jsx
-import styled from '@emotion/styled'
+import { styled } from '@umber-style/react'
 import { themeGet } from '@soroush.tech/styled-system/theme-get'
 
 const Button = styled('button')`
   color: ${themeGet('colors.primary', '#0077cc')};
-  padding: ${themeGet('space.3')}px;
+  padding: ${themeGet('space.3')};
 `
 ```
 

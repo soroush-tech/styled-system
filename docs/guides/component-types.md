@@ -3,7 +3,6 @@
 Some teams that have adopted Styled System take an approach to organizing UI components by type,
 creating separate layout, typography, flexbox, and other categories when adding style props.
 This means that each _layout_ component type is guaranteed to have the same props API as the others.
-For an example of this approach, see [Primer Components](https://primer.style/components/docs/system-props).
 
 To create your own component types, use the `compose` utility
 to create custom style functions that each new component can use.
@@ -21,12 +20,13 @@ export const layout = compose(space, display, width, maxWidth, color)
 
 To add these props to a component, import the composed `layout` function and pass it to the `styled` function.
 
-```js
+```tsx
 // example component definition
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
+import type { SpaceProps, LayoutProps, ColorProps } from '@soroush.tech/styled-system'
 import { layout } from './style-props'
 
-export const Box = styled('div')(layout)
+export const Box = styled('div')<SpaceProps & LayoutProps & ColorProps>(layout)
 ```
 
 ## Creating other component types

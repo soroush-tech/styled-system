@@ -73,7 +73,6 @@ colors: {
   text: '#000',
   background: '#fff',
   blue: [
-    // values from https://primer.style/components/docs/primer-theme
     '#f1f8ff',
     '#dbedff',
     '#c8e1ff',

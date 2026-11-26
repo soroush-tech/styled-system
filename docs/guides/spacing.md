@@ -31,12 +31,12 @@ One of the simpler approaches comes from the early days of the web, and is a rea
 To create a spacer component with Styled System, you can either reuse a [Box component](./build-a-box.md) or create a specialized component
 for this purpose.
 
-```js
+```tsx
 // example Spacer component
-import styled from 'styled-components'
-import { space } from '@soroush.tech/styled-system'
+import { styled } from '@umber-style/react'
+import { space, type SpaceProps } from '@soroush.tech/styled-system'
 
-const Spacer = styled.div(space)
+const Spacer = styled('div')<SpaceProps>(space)
 ```
 
 To use the Spacer component, render it without any children and use the margin props.
@@ -63,46 +63,50 @@ The Spacer component is also really great for flexbox layouts, where `margin: au
 ## Wrapper Component
 
 Some people use a wrapping parent component to control spacing on child components.
-This is exactly what [Rebass Space][] does and can be useful for tiled layouts or grid systems.
+This can be useful for tiled layouts or grid systems.
 
 To target child elements you can either use the `React.Children` API to map over child elements, or use child CSS selectors.
 The use of child CSS selectors can lead to styling bugs and isn't generally recommended.
 
-```js
+```tsx
 // example using child CSS selectors
-import styled from 'styled-components'
-import { space } from '@soroush.tech/styled-system'
+import { styled } from '@umber-style/react'
+import { space, type SpaceProps } from '@soroush.tech/styled-system'
 
-const SpaceChildren = styled.div`
-  & > * {
-    ${space}
-  }
-`
+const SpaceChildren = styled('div')<SpaceProps>((props) => ({
+  '& > *': space(props),
+}))
 ```
 
-The following example comes from [Rebass Space][].
-This approach does not create a wrapping element and does not rely on child CSS selectors.
+The following example does not create a wrapping element and does not rely on child CSS selectors.
 
-```jsx
-import React from 'react'
-import styled from 'styled-components'
-import { space } from '@soroush.tech/styled-system'
+```tsx
+import { Children, cloneElement, type ReactElement, type ReactNode } from 'react'
+import { styled } from '@umber-style/react'
+import { space, type SpaceProps } from '@soroush.tech/styled-system'
 
-const classnames = (...args) => args.join(' ')
-const getClassName = (el) => (el.props && el.props.className) || ''
+const classnames = (...args: string[]) => args.join(' ')
+const getClassName = (el: ReactElement<{ className?: string }>) => el.props.className || ''
 
-export const StyledChildren = ({ className, children, ...props }) => {
-  const styledChildren = React.Children.toArray(children).map((child) =>
-    React.cloneElement(child, {
-      className: classnames(getClassName(child), className),
+export const StyledChildren = ({
+  className,
+  children,
+}: {
+  className?: string
+  children?: ReactNode
+}) => {
+  const styledChildren = Children.toArray(children).map((child) =>
+    cloneElement(child as ReactElement<{ className?: string }>, {
+      className: classnames(
+        getClassName(child as ReactElement<{ className?: string }>),
+        className ?? ''
+      ),
     })
   )
   return <>{styledChildren}</>
 }
 
-const SpaceChildren = styled(StyledChildren)(space)
-
-SpaceChildren.propTypes = space.propTypes
+const SpaceChildren = styled(StyledChildren)<SpaceProps>(space)
 
 export default SpaceChildren
 ```
@@ -116,12 +120,12 @@ By including the `space` props in your components, you can quickly make one-off 
 
 The `space` utility can be added to any component that accepts the `className` prop.
 
-```js
+```tsx
 // example
-import styled from 'styled-component'
-import { space } from '@soroush.tech/styled-system'
+import { styled } from '@umber-style/react'
+import { space, type SpaceProps } from '@soroush.tech/styled-system'
 
-const Heading = styled.h2(space)
+const Heading = styled.h2<SpaceProps>(space)
 ```
 
 When using the component, you can adjust margin and padding in any direction needed.
@@ -133,20 +137,18 @@ When using the component, you can adjust margin and padding in any direction nee
 </Heading>
 ```
 
-[rebass space]: https://github.com/rebassjs/rebass/tree/master/packages/space
-
 While the `space` utility is a perfect choice for most cases, it can be useful to add only margin or padding props to
 a component. To handle those cases, Styled System provides subsets of the `space` utility: `padding` and `margin` utilities.
 
 The `padding` utility adds only padding props to a component and the `margin` utility adds only margin props. Usage of
 the utilities are the same as the usage of `space` utility
 
-```js
+```tsx
 // margin utility example
-import styled from 'styled-component'
-import { margin } from '@soroush.tech/styled-system'
+import { styled } from '@umber-style/react'
+import { margin, type MarginProps } from '@soroush.tech/styled-system'
 
-const Paragraph = styled.p(margin)
+const Paragraph = styled.p<MarginProps>(margin)
 ```
 
 When using the component, you can adjust margin, but not padding:

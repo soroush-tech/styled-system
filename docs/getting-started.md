@@ -5,10 +5,10 @@ to your React components
 and allows you to control styles based on a global theme object
 with typographic scales, colors, and layout properties.
 
-To use Styled System, install a CSS-in-JS library such as [Styled Components][] or [Emotion][].
+To use Styled System, install a CSS-in-JS library whose `styled()` accepts style functions. The examples use UmberStyle.
 
 ```sh
-npm i @soroush.tech/styled-system styled-components
+npm i @soroush.tech/styled-system @umber-style/react
 ```
 
 ## Create a Component
@@ -16,13 +16,11 @@ npm i @soroush.tech/styled-system styled-components
 Create a new component that uses style functions from Styled System.
 To start with, add the `color` function to the component's styles argument.
 
-```javascript
-import styled from 'styled-components'
-import { color } from '@soroush.tech/styled-system'
+```tsx
+import { styled } from '@umber-style/react'
+import { color, type ColorProps } from '@soroush.tech/styled-system'
 
-const Box = styled.div`
-  ${color}
-`
+const Box = styled('div')<ColorProps>(color)
 
 export default Box
 ```
@@ -54,19 +52,16 @@ export default {
 ## Theming
 
 Most CSS-in-JS libraries include a ThemeProvider to provide values through React context.
-Import the styled-components [ThemeProvider][] in the root of your application and pass the theme to the `theme` prop.
+Import the UmberStyle `ThemeProvider` in the root of your application and pass the theme to the `theme` prop.
 
 ```jsx
-import React from 'react'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@umber-style/react'
 import theme from './theme'
 
 const App = (props) => <ThemeProvider theme={theme}>{/* application elements */}</ThemeProvider>
 
 export default App
 ```
-
-[themeprovider]: https://www.styled-components.com/docs/advanced#theming
 
 With the ThemeProvider added, the Box component now has access to the colors defined in the theme object.
 
@@ -86,24 +81,27 @@ Styled System will attempt to find a value based on keys in the theme and fallba
 To make the Box component a little more useful, add a few more Styled System functions
 to handle layout styles.
 
-```jsx
-import styled from 'styled-components'
-import { space, layout, color } from '@soroush.tech/styled-system'
+```tsx
+import { styled } from '@umber-style/react'
+import {
+  space,
+  layout,
+  color,
+  type SpaceProps,
+  type LayoutProps,
+  type ColorProps,
+} from '@soroush.tech/styled-system'
 
-const Box = styled.div`
-  ${space}
-  ${layout}
-  ${color}
-`
+const Box = styled('div')<SpaceProps & LayoutProps & ColorProps>(space, layout, color)
 
 export default Box
 ```
 
-If you prefer using the plain object syntax, you can pass Styled System functions in as arguments.
+`styled()` takes any number of styles, so you can add your own plain object next to the Styled System functions.
 
-```js
-// example using object syntax
-const Box = styled('div')(
+```tsx
+// example with an object next to the style functions
+const Box = styled('div')<SpaceProps & LayoutProps & ColorProps>(
   {
     boxSizing: 'border-box',
   },
@@ -117,11 +115,7 @@ const Box = styled('div')(
 
 The `space` function adds margin and padding props.
 The margin and padding props use a shorthand syntax, similar to
-[Basscss][basscss], [Tachyons][tachyons], and [Bootstrap][bootstrap].
-
-[basscss]: http://basscss.com/#basscss-margin
-[tachyons]: http://tachyons.io/docs/layout/spacing/
-[bootstrap]: https://getbootstrap.com/docs/4.1/utilities/spacing/
+the utility classes of functional CSS.
 
 ### Margin Props
 
@@ -212,7 +206,5 @@ Read the [Responsive Styles][] docs for more information.
 Styled System includes pre-built functions for many other commonly used CSS properties.
 For a complete list, see the [Reference Table][] of style functions.
 
-[styled components]: https://github.com/styled-components/styled-components
-[emotion]: https://github.com/emotion-js/emotion
 [responsive styles]: ./responsive-styles.md
 [reference table]: ./table.md
