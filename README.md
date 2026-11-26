@@ -19,7 +19,7 @@ It is a **drop-in replacement** for the `styled-system` runtime: the root export
 - Influenced by constraint-based design-system principles
 - Typographic scale, and a spacing scale for `margin`, `padding` and `gap`
 - Works with any color palette
-- Works with most CSS-in-JS libraries, including [Emotion](https://emotion.sh) and [styled-components](https://styled-components.com)
+- Works with any CSS-in-JS library whose `styled()` accepts style functions; the examples use UmberStyle
 - First-class TypeScript types - theme-scale-aware props, replacing `@types/styled-system`
 
 ## Install
@@ -42,22 +42,30 @@ yarn add @soroush.tech/styled-system
 `prop-types` (`^15.8.1`, optional peer) is used by a single [subpath](#subpath-imports),
 `prop-types`. Install it only if you import that subpath. The `should-forward-prop` subpath
 needs nothing installed: its check for a valid attribute is a dependency of this package. You bring your own CSS-in-JS
-library (Emotion, styled-components, ...); the core carries neither at runtime.
+library (the examples use [UmberStyle](https://umber-style.soroush.design): `pnpm add @umber-style/react`); the core carries none at runtime.
 
 ## Usage
 
-```ts
-// Example uses Emotion, but styled-system works with most other CSS-in-JS libraries as well
-import styled from '@emotion/styled'
-import { space, layout, typography, color } from '@soroush.tech/styled-system'
+```tsx
+// The example uses UmberStyle, but styled-system works with any CSS-in-JS library
+// whose styled() accepts style functions
+import { styled } from '@umber-style/react'
+import {
+  space,
+  layout,
+  typography,
+  color,
+  type SpaceProps,
+  type LayoutProps,
+  type TypographyProps,
+  type ColorProps,
+} from '@soroush.tech/styled-system'
+import shouldForwardProp from '@soroush.tech/styled-system/should-forward-prop'
 
-// Add styled-system functions to your component
-const Box = styled.div`
-  ${space}
-  ${layout}
-  ${typography}
-  ${color}
-`
+// Add styled-system functions to your component, and keep the style props off the element
+const Box = styled('div', { shouldForwardProp })<
+  SpaceProps & LayoutProps & TypographyProps & ColorProps
+>(space, layout, typography, color)
 ```
 
 Each style function exposes its own set of component props that handle styles based on values defined in a theme.

@@ -11,22 +11,22 @@ All Styled System functions rely on these low-level utilities.
 ## Example
 
 ```jsx
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { system } from '@soroush.tech/styled-system'
 
 const textDecoration = system({
   textDecoration: true,
 })
 
-const Link = styled.a`
-  ${system({
+const Link = styled('a')(
+  system({
     textDecoration: true,
     fontWeight: {
       property: 'fontWeight',
       scale: 'fontWeights',
     },
-  })}
-`
+  })
+)
 
 export default Link
 ```
@@ -60,7 +60,7 @@ This will take the `transition` prop and translate it into a style object.
 
 ### Style prop function
 
-The `system` function returns a style prop function that can be used in Styled Components, Emotion, or other CSS-in-JS libraries.
+The `system` function returns a style prop function that can be used in UmberStyle, or in any other CSS-in-JS library whose `styled()` accepts style functions.
 This function takes `props` as an argument and returns a style object.
 The style prop function includes a `.propNames` static array that can be used to detect which props the function accepts.
 
@@ -93,7 +93,7 @@ export const color = system(config)
 To combine multiple Styled System functions in a single component, use the `compose` utility.
 
 ```js
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { space, layout, color, compose } from '@soroush.tech/styled-system'
 
 const Box = styled('div')(compose(space, layout, color))

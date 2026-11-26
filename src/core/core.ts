@@ -12,8 +12,8 @@ type CSSLength = string | number
 /**
  * A CSS-in-JS style object: typed CSS properties plus nested selectors, at-rules
  * (media queries), and pseudo-classes. Structurally compatible with the `CSSObject`
- * of Emotion and styled-components, so a {@link Parser} can be dropped straight into
- * either engine's `styled()` as an interpolation.
+ * of UmberStyle and other CSS-in-JS libraries, so a {@link Parser} can be dropped straight into
+ * their `styled()` as a style function.
  */
 export interface CSSObject extends CSS.Properties<CSSLength>, CSS.PropertiesHyphen<CSSLength> {
   [selectorOrAtRule: string]: CSSObject | string | number | undefined
@@ -62,11 +62,11 @@ interface ParserCache {
 
 export interface Parser {
   // TEMPORARY loosening to match the original @styled-system `styleFn`
-  // (`(...args: any[]): any`). The `any` return makes Emotion treat style
+  // (`(...args: any[]): any`). The `any` return makes the CSS-in-JS library treat style
   // functions (layout, space, ...) as permissive interpolations, so consumers'
   // `styled('svg')(layout, ...)` accept styled-system props as they did upstream.
   // TODO(next version): restore the strict `<P extends { theme?: unknown }>(props: P): CSSObject`
-  // signature once consumer styled components declare their prop generics.
+  // signature once consumer components made with `styled()` declare their prop generics.
   (...args: any[]): any
   config: ParserConfig
   propNames: string[]

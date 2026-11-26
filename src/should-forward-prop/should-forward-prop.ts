@@ -1,7 +1,7 @@
 import { isPropValid } from '@umber-style/is-prop-valid/react'
 import { all } from '#presets'
 
-// Tiny memoize, replacing the @emotion/memoize dependency.
+// Tiny memoize, so no memoize dependency is needed.
 const memoize = <V>(fn: (key: string) => V): ((key: string) => V) => {
   const cache: Record<string, V> = Object.create(null)
   return (key) => {

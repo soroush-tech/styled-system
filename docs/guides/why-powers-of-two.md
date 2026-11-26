@@ -1,9 +1,13 @@
-import { Flex, Box } from 'theme-ui'
+import { styled } from '@umber-style/react'
+import { space, color, layout, flexbox } from '@soroush.tech/styled-system'
+
+export const Box = styled('div')(space, color, layout)
+export const Flex = styled('div')({ display: 'flex' }, space, color, layout, flexbox)
 
 # Why Powers of Two
 
 If you're less familiar with functional CSS, the idea of an 8px grid,
-come from libraries like Bootstrap, or just have ten fingers and ten toes,
+come from other CSS frameworks, or just have ten fingers and ten toes,
 then you might be less familiar with the rationale for Styled System's powers-of-two based spacing scale.
 While most human numbering systems are base ten due to the number of "digits" we have on our hands,
 base ten numbering systems aren't always the easiest to work with mathematically.

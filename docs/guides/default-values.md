@@ -7,12 +7,13 @@ has a specific padding, but every once in a while, you need to change it up.
 To add a default value for any Styled System prop, set a default parameter on a thin
 wrapper component (React 19 removed the older `defaultProps` approach for function components).
 
-```js
+```tsx
 // example
-import styled from 'styled-components'
-import { space, color } from '@soroush.tech/styled-system'
+import type { ComponentProps } from 'react'
+import { styled } from '@umber-style/react'
+import { space, color, type SpaceProps, type ColorProps } from '@soroush.tech/styled-system'
 
-const CardBase = styled.div(
+const CardBase = styled('div')<SpaceProps & ColorProps>(
   {
     borderRadius: '2px',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.125)',
@@ -23,7 +24,9 @@ const CardBase = styled.div(
 
 // Set defaults with default parameters on a thin wrapper (React 19 removed `defaultProps`
 // for function components).
-const Card = ({ p = 2, bg = 'white', ...props }) => <CardBase p={p} bg={bg} {...props} />
+const Card = ({ p = 2, bg = 'white', ...props }: ComponentProps<typeof CardBase>) => (
+  <CardBase p={p} bg={bg} {...props} />
+)
 
 export default Card
 ```

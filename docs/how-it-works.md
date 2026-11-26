@@ -1,39 +1,39 @@
 # How it Works
 
 Most CSS-in-JS libraries accept functions as arguments to create dynamic styles based on props.
-For example, the following sets color dynamically in styled-components based on the `color` prop:
+For example, the following sets color dynamically in UmberStyle based on the `color` prop:
 
-```js
-import styled from 'styled-components'
+```tsx
+import { styled } from '@umber-style/react'
 
-const Box = styled.div`
+const Box = styled('div')<{ color?: string }>`
   color: ${(props) => props.color};
 `
 ```
 
 Beyond just passing a dynamic value, an entire style declaration can be returned in functions like this.
 
-```js
-import styled from 'styled-components'
+```tsx
+import { styled } from '@umber-style/react'
 
-const getColor = (props) => `color: ${props.color};`
+const getColor = (props: { color?: string }) => `color: ${props.color};`
 
-const Box = styled.div`
+const Box = styled('div')<{ color?: string }>`
   ${getColor}
 `
 ```
 
 Style object can also be returned, which is a much simpler way to handle dynamic values in JavaScript.
 
-```js
-import styled from 'styled-components'
+```tsx
+import { styled } from '@umber-style/react'
 
 // works exactly the same as the previous function
-const getColor = (props) => ({
+const getColor = (props: { color?: string }) => ({
   color: props.color,
 })
 
-const Box = styled.div`
+const Box = styled('div')<{ color?: string }>`
   ${getColor}
 `
 ```

@@ -499,11 +499,21 @@ The `shadow` utility includes the following style props.
 The `compose` utility is used to combine multiple style functions together into one.
 This utility can help improve performance when using multiple style props functions on the same component.
 
-```js
-import styled from 'styled-components'
-import { compose, typography, space, color } from '@soroush.tech/styled-system'
+```tsx
+import { styled } from '@umber-style/react'
+import {
+  compose,
+  typography,
+  space,
+  color,
+  type TypographyProps,
+  type SpaceProps,
+  type ColorProps,
+} from '@soroush.tech/styled-system'
 
-export const Text = styled('div')(compose(typography, space, color))
+export const Text = styled('div')<TypographyProps & SpaceProps & ColorProps>(
+  compose(typography, space, color)
+)
 ```
 
 <!--
@@ -513,7 +523,7 @@ The `themeGet` function is an existential getter function
 that can be used in any style declaration to get a value
 from your theme, with support for fallback values.
 This helps prevent errors from throwing when a theme value is missing,
-which can be helpful when unit testing styled-components.
+which can be helpful when unit testing.
 
 ```js
 themeGet(objectPath, fallbackValue)(props)
@@ -524,10 +534,10 @@ themeGet(objectPath, fallbackValue)(props)
 literal should look like this:
 
 ```js
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { themeGet } from '@soroush.tech/styled-system/theme-get'
 
-const Box = styled.div`
+const Box = styled('div')`
   border-radius: ${themeGet('radii.small', '4px')};
 `
 ```
@@ -536,10 +546,10 @@ When used with object literal syntax, `themeGet` needs to be in a
 function call and have `props` passed to it:
 
 ```js
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { themeGet } from '@soroush.tech/styled-system/theme-get'
 
-const Box = styled('div')(props => ({
+const Box = styled('div')((props) => ({
   borderRadius: themeGet('radii.small', '4px')(props),
 }))
 ```
@@ -553,12 +563,10 @@ Prop type definitions are available for each style function to add to your compo
 Each value in `propTypes` is an object which should be assigned (or spread) to the component's `propTypes`.
 
 ```jsx
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { width } from '@soroush.tech/styled-system'
 
-const Box = styled.div`
-  ${width}
-`
+const Box = styled('div')(width)
 
 Box.propTypes = {
   ...width.propTypes,
@@ -582,7 +590,7 @@ Each key in the configuration object can define the following:
 
 ```js
 // example
-import styled from 'styled-components'
+import { styled } from '@umber-style/react'
 import { system } from '@soroush.tech/styled-system'
 
 const Text = styled('div')(
@@ -610,12 +618,12 @@ The function takes two arguments: `(value, scale)`, where `value` is the raw pro
 
 Creates a custom style utility to apply complex styles based on a single prop.
 
-```js
-import styled from 'styled-components'
+```tsx
+import { styled } from '@umber-style/react'
 import { variant } from '@soroush.tech/styled-system'
 
-const Card = styled.div`
-  ${variant({
+const Card = styled('div')<{ variant?: 'normal' | 'large' }>(
+  variant({
     variants: {
       normal: {
         p: 2,
@@ -628,11 +636,8 @@ const Card = styled.div`
         borderRadius: 4,
       },
     },
-  })}
-`
-Card.defaultProps = {
-  variant: 'normal',
-}
+  })
+)
 // <Card variant='large' />
 ```
 

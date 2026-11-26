@@ -59,6 +59,4 @@ subpath exports:
 
 ## Examples
 
-Runnable demos live in the [examples repo](https://github.com/soroush-tech/examples/tree/main/styled-system) -
-`basic` (styled-components), `emotion`, `css`, `responsive-objects`, `theme-aliases`,
-`svelte`, and `typescript` (typed, `tsc`-verified).
+Runnable demos live in the [examples repo](https://github.com/soroush-tech/examples/tree/main/styled-system).
