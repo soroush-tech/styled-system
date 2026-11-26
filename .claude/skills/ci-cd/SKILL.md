@@ -55,6 +55,9 @@ Pin every `uses:` by the action's **origin**:
 
 - The `test` job uploads `coverage/lcov.info`.
 - Uploads use the repository secret **`CODECOV_TOKEN`** (`token: ${{ secrets.CODECOV_TOKEN }}`).
+- The `build` job also reports the bundle size of the ES module build (`pnpm bundle-analysis`,
+  `@codecov/bundle-analyzer` over `dist`, type files, maps and the CommonJS build left out) with
+  the same secret; the step is skipped when the secret is not given (a pull request from a fork).
 - 100% is enforced in `vitest.config.ts` (`thresholds: { 100: true }`); Codecov is reporting
   only (`.codecov.yml`).
 
