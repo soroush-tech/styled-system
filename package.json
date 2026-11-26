@@ -13,16 +13,16 @@
   ],
   "author": "Masoud Soroush <masoud@soroush.tech>",
   "license": "MIT",
-  "homepage": "https://docs.soroush.tech/styled-system/",
+  "homepage": "https://github.com/soroush-tech/styled-system#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soroush-tech/design-system.git",
-    "directory": "packages/styled-system"
+    "url": "git+https://github.com/soroush-tech/styled-system.git"
   },
   "bugs": {
-    "url": "https://github.com/soroush-tech/design-system/issues"
+    "url": "https://github.com/soroush-tech/styled-system/issues"
   },
   "type": "module",
+  "packageManager": "pnpm@10.13.1",
   "sideEffects": false,
   "files": [
     "dist"
@@ -297,9 +297,12 @@
   "scripts": {
     "build": "tsdown",
     "lint": "oxlint --deny-warnings",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "bench": "soroush-bench bench/color.bench.ts",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
@@ -320,9 +323,9 @@
   "devDependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
     "@soroush.tech/bench": "^2.2.3",
-    "@soroush.tech/eslint-config": "workspace:*",
     "@types/prop-types": "^15.7.15",
     "@vitest/coverage-v8": "^5.1.0",
+    "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "prop-types": "^15.8.1",
     "tsdown": "^0.23.7",
