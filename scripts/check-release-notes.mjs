@@ -1,5 +1,5 @@
 // Guard on the publishable package: a release-notes file must exist for its current version.
-// cd.yml reads release-notes/<version>.md at publish time and refuses to release without it;
+// cd-packages.yml reads release-notes/<version>.md at publish time and refuses to release without it;
 // this catches the same gap earlier, so a version bump can't land on main without its notes.
 // Run `pnpm check:release-notes`.
 import { existsSync, readFileSync } from 'node:fs'

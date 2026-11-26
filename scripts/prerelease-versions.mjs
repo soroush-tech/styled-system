@@ -1,4 +1,4 @@
-// Turns package.json's target version into the one a cd.yml run publishes, in the CI checkout
+// Turns package.json's target version into the one a cd-packages.yml run publishes, in the CI checkout
 // only (nothing is committed). Prints `VERSION=<version>` for $GITHUB_ENV.
 //
 //   node scripts/prerelease-versions.mjs <alpha|rc|stable>

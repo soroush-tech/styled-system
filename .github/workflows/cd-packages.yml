@@ -1,4 +1,4 @@
-name: CD
+name: CD · Packages (npm)
 
 # Publishes @soroush.tech/styled-system to npm via Trusted Publishing (OIDC). Manual dispatch
 # only - never from a push, PR merge, or CI completion. A release is a deliberate act with
@@ -33,7 +33,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: cd
+    environment: cd-packages
     timeout-minutes: 15
     permissions:
       id-token: write # OIDC token for npm Trusted Publishing (no NPM_TOKEN)
