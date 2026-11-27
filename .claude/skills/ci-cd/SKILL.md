@@ -1,6 +1,6 @@
 ---
 name: ci-cd
-description: GitHub Actions CI/CD conventions for this repo - the single CI entry workflow (lint, test, build, bench, ci-ok), the action-pinning rule (version tags for `actions/*`, commit SHAs for everything else including our own org), tokenless-OIDC Codecov uploads, and manual npm publishing via cd-packages.yml. Use when adding, editing, or debugging any workflow under .github/workflows/.
+description: GitHub Actions CI/CD conventions for this repo - the single CI entry workflow (lint, test, build, bench, ci-ok), the action-pinning rule (version tags for `actions/*`, commit SHAs for everything else including our own org), Codecov uploads with the `CODECOV_TOKEN` secret, and manual npm publishing via cd-packages.yml. Use when adding, editing, or debugging any workflow under .github/workflows/.
 paths: .github/workflows/**
 metadata:
   internal: true
@@ -54,8 +54,10 @@ Pin every `uses:` by the action's **origin**:
 ## Coverage → Codecov
 
 - The `test` job uploads `coverage/lcov.info`.
-- Uploads are **tokenless via OIDC** (`use_oidc: true` + job `permissions: { id-token: write }`,
-  works on this public repo) - no `CODECOV_TOKEN` secret.
+- Uploads use the repository secret **`CODECOV_TOKEN`** (`token: ${{ secrets.CODECOV_TOKEN }}`).
+- The `build` job also reports the bundle size of the ES module build (`pnpm bundle-analysis`,
+  `@codecov/bundle-analyzer` over `dist`, type files, maps and the CommonJS build left out) with
+  the same secret; the step is skipped when the secret is not given (a pull request from a fork).
 - 100% is enforced in `vitest.config.ts` (`thresholds: { 100: true }`); Codecov is reporting
   only (`.codecov.yml`).
 

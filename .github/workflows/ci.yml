@@ -41,7 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # tokenless Codecov upload (OIDC)
     timeout-minutes: 15
     steps:
       - name: Checkout Repository
@@ -58,7 +57,7 @@ jobs:
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
-          use_oidc: true
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           slug: soroush-tech/styled-system
 
@@ -67,6 +66,8 @@ jobs:
     permissions:
       contents: read
     timeout-minutes: 15
+    env:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
@@ -78,6 +79,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # Bundle size of the ES module build (what apps bundle), reported by Codecov on each PR.
+      # Skipped where the secret is not given (a pull request from a fork).
+      - name: Upload bundle size to Codecov
+        if: ${{ env.CODECOV_TOKEN != '' }}
+        run: pnpm bundle-analysis --upload-token="$CODECOV_TOKEN"
 
   # Performance gate: the bench suite runs in the pinned Docker sandbox against the last
   # npm release (via soroush-tech/bench-action); any case below the minimum speed ratio

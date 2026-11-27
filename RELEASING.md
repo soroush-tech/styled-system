@@ -15,4 +15,4 @@ Releases are manual: run the `CD · Packages (npm)` workflow (`.github/workflows
 1. npm: add a trusted publisher for `@soroush.tech/styled-system` with repository `soroush-tech/styled-system`, workflow `cd-packages.yml`, environment `cd-packages`.
 2. GitHub: create the environment `cd-packages` (add required reviewers if a release should need approval).
 3. GitHub: protect `main` and require the `ci-ok` status check.
-4. Optional: enable Codecov for the repository (the upload is tokenless, via OIDC), and set the repository variable `BENCH_BOT_APP_ID` and secret `BENCH_BOT_PRIVATE_KEY` for the bench comment under the bot identity.
+4. Optional: enable Codecov for the repository and add its upload token as the repository secret `CODECOV_TOKEN`, and set the repository variable `BENCH_BOT_APP_ID` and secret `BENCH_BOT_PRIVATE_KEY` for the bench comment under the bot identity.

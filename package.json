@@ -1,6 +1,6 @@
 {
   "name": "@soroush.tech/styled-system",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Maintained, first-class-TypeScript rewrite of styled-system - responsive, theme-aware style props for CSS-in-JS. Drop-in replacement for styled-system v5.",
   "keywords": [
     "styled-system",
@@ -304,11 +304,12 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "bench": "soroush-bench bench/color.bench.ts",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "bundle-analysis": "bundle-analyzer ./dist --bundle-name=styled-system --ignore-patterns='*.cjs' --ignore-patterns='*.d.mts' --ignore-patterns='*.d.cts' --ignore-patterns='*.map'"
   },
   "dependencies": {
-    "csstype": "^3.2.3",
-    "@umber-style/is-prop-valid": "^0.7.0"
+    "@umber-style/is-prop-valid": ">=0.7.0 <2.0.0",
+    "csstype": "^3.2.3"
   },
   "peerDependencies": {
     "prop-types": "^15.8.1"
@@ -319,6 +320,7 @@
     }
   },
   "devDependencies": {
+    "@codecov/bundle-analyzer": "2.0.1",
     "@soroush.tech/bench": "^2.2.3",
     "@types/prop-types": "^15.7.15",
     "@vitest/coverage-v8": "^5.1.0",
