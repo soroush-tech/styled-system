@@ -13,7 +13,7 @@ importers:
   .:
     dependencies:
       '@umber-style/is-prop-valid':
-        specifier: ^0.7.0
+        specifier: '>=0.7.0 <2.0.0'
         version: 0.7.0
       csstype:
         specifier: ^3.2.3
